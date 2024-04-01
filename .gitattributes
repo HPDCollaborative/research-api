@@ -1,0 +1,15 @@
+* text=auto
+
+*.css diff=css
+*.html diff=html
+*.md diff=markdown
+
+/.editorconfig export-ignore
+/.gitattributes export-ignore
+/.gitlab export-ignore
+/.husky export-ignore
+/.gitignore export-ignore
+/.prettierignore export-ignore
+/.prettierrc export-ignore
+/release.config.js export-ignore
+/.gitlab-ci.yml export-ignore

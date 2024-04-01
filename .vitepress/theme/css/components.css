@@ -1,0 +1,57 @@
+.vp-code-group {
+  @apply mt-4 bg-gray-800 dark:bg-gray-950 rounded-lg;
+
+  .tabs {
+    @apply relative flex bg-gray-800 dark:bg-gray-950 overflow-x-auto overflow-y-hidden shadow-[inset_0_-1px] shadow-neutral-400/40 dark:shadow-neutral-600/60 px-3 py-0 mx-0 rounded-[8px_8px_0_0];
+
+    input {
+      @apply fixed opacity-0 pointer-events-none;
+    }
+
+    label {
+      @apply relative inline-block leading-[48px] text-sm font-medium text-[color:var(--vp-code-tab-text-color)] whitespace-nowrap cursor-pointer transition-[color] duration-[0.25s] px-3 py-0 border-b-transparent border-b border-solid after:absolute after:z-[1] after:h-0.5 after:content-[''] after:bg-transparent after:transition-[background-color] after:duration-[0.25s] after:rounded-sm after:-bottom-px after:inset-x-2;
+    }
+  }
+
+  label:hover {
+    @apply text-[color:var(--vp-code-tab-hover-text-color)];
+  }
+
+  input:checked + label {
+    @apply text-[color:var(--vp-code-tab-active-text-color)];
+
+    &:after {
+      @apply bg-[color:var(--vp-code-tab-active-bar-color)];
+    }
+  }
+
+  div[class*="language-"],
+  .vp-block {
+    @apply hidden mt-0 rounded-t-none;
+  }
+
+  div[class*="language-"].active,
+  .vp-block.active {
+    @apply block;
+  }
+
+  .blocks {
+    @apply pb-3;
+  }
+
+  pre {
+    @apply my-0 rounded-none;
+  }
+}
+
+.vp-block {
+  @apply px-6 py-5;
+}
+
+.dark .vp-code span {
+  color: var(--shiki-dark, inherit);
+}
+
+html:not(.dark) .vp-code span {
+  color: var(--shiki-light, inherit);
+}

@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "paths": {
+      "@/*": [".vitepress/theme/*"]
+    }
+  },
+  "include": ["**/*.js", "**/*.vue"],
+  "exclude": ["**/node_modules/**", "**/dist/**", "template"]
+}

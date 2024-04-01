@@ -1,0 +1,55 @@
+{
+  "private": "true",
+  "type": "module",
+  "scripts": {
+    "build": "vitepress build",
+    "dev": "vitepress dev",
+    "preview": "vitepress preview",
+    "cn": "npm update",
+    "setup": "node ./bin/setup.js",
+    "prebuild": "node ./bin/prebuild.js",
+    "build:search": "node ./bin/tasks.js search",
+    "build:versions": "node ./bin/tasks.js versions",
+    "build:sidebar": "node ./bin/tasks.js sidebar",
+    "pull:docs": "node ./bin/tasks.js pull"
+  },
+  "dependencies": {
+    "@headlessui/vue": "^1.7.19",
+    "@iconify-json/heroicons": "^1.1.20",
+    "@iconify-json/heroicons-solid": "^1.1.11",
+    "@iconify/tailwind": "^0.1.4",
+    "@tailwindcss/typography": "^0.5.12",
+    "fuse.js": "^7.0.0",
+    "lodash": "^4.17.21",
+    "meilisearch": "^0.38.0",
+    "vue": "^3.4.21"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vueuse/core": "^10.9.0",
+    "autoprefixer": "^10.4.19",
+    "dotenv": "^16.4.5",
+    "focus-trap": "^7.5.4",
+    "gray-matter": "^4.0.3",
+    "mark.js": "^8.11.1",
+    "markdown-it-anchor": "^8.6.7",
+    "markdown-it-container": "^4.0.0",
+    "postcss-import": "^16.1.0",
+    "prettier": "^3.2.5",
+    "tailwindcss": "^3.4.3",
+    "unplugin-auto-import": "^0.17.5",
+    "unplugin-icons": "^0.18.5",
+    "unplugin-vue-components": "^0.26.0",
+    "vitepress": "^1.0.1"
+  },
+  "postcss": {
+    "plugins": {
+      "postcss-import": {},
+      "tailwindcss/nesting": {},
+      "tailwindcss": {
+        "config": "./tailwind.config.js"
+      },
+      "autoprefixer": {}
+    }
+  }
+}

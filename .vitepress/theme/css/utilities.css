@@ -1,0 +1,373 @@
+.prose {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-normal;
+  }
+  h1 {
+    @apply text-3xl;
+
+    .header-anchor {
+      @apply hidden;
+    }
+  }
+  h2 {
+    @apply mb-3;
+  }
+  h2,
+  h3 {
+    @apply px-0 mx-0 relative;
+
+    .header-anchor {
+      @apply absolute -ml-6 no-underline inline-block opacity-0;
+    }
+
+    &:hover {
+      .header-anchor {
+        @apply text-primary-500 no-underline border-primary-500 hover:border-none opacity-100;
+      }
+    }
+  }
+  h2,
+  h3,
+  h4 {
+    @apply pt-6 border-t border-surface-300/40 dark:border-surface-600/40 mt-0 mb-6;
+  }
+  ul {
+    @apply list-none px-0;
+  }
+  li {
+    @apply pl-6;
+  }
+  img {
+    @apply rounded-lg shadow;
+  }
+  pre {
+    @apply bg-inherit;
+  }
+  a {
+    @apply font-medium text-primary-500/90 no-underline hover:border-b border-primary-500;
+  }
+  div[class*="language-"] pre {
+    @apply bg-[var(--shiki-color-background)];
+  }
+
+  div[class*="language-"] {
+    @apply shadow-sm rounded-lg relative;
+  }
+
+  div[class*="language-"] .has-focused-lines .line:not(.has-focus) {
+    @apply blur-[1.5px] opacity-60 transition-all duration-300;
+  }
+
+  div[class*="language-"]:hover .has-focused-lines .line:not(.has-focus) {
+    @apply blur-none opacity-100;
+  }
+
+  div[class*="language-"] > button.copy {
+    @apply transition-all text-neutral-400 absolute top-6 right-[6px] z-30 rounded w-5 h-5 bg-transparent bg-center bg-no-repeat opacity-0 cursor-pointer;
+    direction: ltr;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' height='20' width='20' stroke='rgba(163,163,163,.75)' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2'/%3E%3C/svg%3E");
+    background-size: 20px;
+  }
+  div[class*="language-"]:hover > button.copy,
+  div[class*="language-"] > button.copy:focus {
+    @apply opacity-100;
+  }
+  div[class*="language-"] > button.copy:hover {
+    @apply border-neutral-400/75;
+  }
+  div[class*="language-"] > button.copy.copied,
+  div[class*="language-"] > button.copy:hover.copied {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' height='20' width='20' stroke='rgba(22,163,74,1)' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9 2 2 4-4'/%3E%3C/svg%3E");
+  }
+  div[class*="language-"] > button.copy.copied:before,
+  div[class*="language-"] > button.copy:hover.copied:before {
+    transform: translate(calc(-100% - 1px));
+    content: "Copied";
+    @apply relative top-[-1px] flex justify-center items-center px-[10px] w-fit h-5 text-center text-[12px] font-medium text-green-600 whitespace-nowrap;
+  }
+  .lang {
+    @apply absolute top-0 right-0 text-neutral-400 z-20 opacity-75 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full;
+  }
+
+  div[class*="language-"] pre,
+  div[class*="language-"] pre[class*="shiki"] {
+    @apply relative z-[1];
+  }
+  div[class*="language-"] pre[class*="shiki"] {
+    counter-reset: step;
+    @apply rounded-lg overflow-auto relative p-0 !important;
+
+    &:hover .line {
+      @apply blur-none;
+    }
+
+    .line {
+      transition: filter 0.3s;
+      @apply inline-block w-full px-2;
+
+      &::before {
+        content: counter(step);
+        counter-increment: step;
+        @apply w-6 mr-4 pr-2 inline-block text-right border-r border-neutral-400/40 text-neutral-400/40 dark:border-neutral-600/60 dark:text-neutral-600/60;
+      }
+
+      &.highlighted {
+        @apply bg-gray-400/20 dark:bg-gray-300/10;
+      }
+
+      &.add {
+        @apply bg-green-400/20 dark:bg-green-500/20;
+
+        &::before {
+          content: "+";
+          @apply text-green-500 dark:text-green-600;
+        }
+      }
+      &.remove {
+        @apply bg-red-500/50 dark:bg-red-500/40;
+
+        &::before {
+          content: "-";
+          @apply text-red-400/60 dark:text-red-400/50;
+        }
+      }
+      &.error {
+        @apply bg-red-500/50 dark:bg-red-500/40;
+        &::before {
+          @apply text-red-400/60 dark:text-red-400/50;
+        }
+      }
+      &.warning {
+        @apply bg-yellow-500/50 dark:bg-yellow-500/40;
+        &::before {
+          @apply text-yellow-400/60 dark:text-yellow-400/50;
+        }
+      }
+    }
+
+    code {
+      @apply block min-w-full overflow-auto py-3;
+
+      span {
+        @apply leading-6;
+      }
+    }
+  }
+
+  p > code,
+  li > code {
+    @apply font-semibold;
+  }
+  .custom-block {
+    @apply my-10 border-0 rounded-md px-4 py-1 text-surface-800 shadow-lg dark:shadow-black bg-surface-200/70;
+
+    :not(pre) > code {
+      &::before,
+      &::after {
+        content: "";
+      }
+
+      @apply rounded px-[2px] font-mono text-[0.9rem];
+    }
+
+    .custom-block-title {
+      @apply pt-2 mt-0 text-base text-surface-800 font-semibold uppercase;
+    }
+
+    :is(ul) {
+      @apply mt-2 text-[0.9rem] space-y-0 mb-3;
+
+      :is(li) {
+        @apply text-[0.9rem] leading-6 font-medium;
+
+        :is(ul) {
+          @apply pl-3 mt-0;
+        }
+      }
+    }
+
+    :is(p) {
+      @apply my-1 text-[0.9rem] text-surface-800 leading-6;
+    }
+
+    &.note {
+      @apply bg-secondary-300;
+
+      :not(pre) > code {
+        @apply bg-secondary-200 text-secondary-800;
+      }
+
+      .custom-block-title {
+        &::before {
+          content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>');
+          @apply font-semibold h-5 w-5 inline-block mr-1 mb-[3px] align-middle;
+        }
+      }
+
+      :is(a) {
+        @apply text-inherit;
+
+        &:is(:where(a):not(:where([class~="not-prose"], [class~="not-prose"] *))) {
+          @apply border-secondary-800;
+        }
+      }
+    }
+
+    &.warning {
+      @apply bg-warning-300;
+
+      :not(pre) > code {
+        @apply bg-warning-200 text-warning-800;
+      }
+
+      .custom-block-title {
+        &::before {
+          content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" /></svg>');
+          @apply font-semibold h-5 w-5 inline-block mr-1 mb-[2px] align-middle;
+        }
+      }
+
+      :is(a) {
+        @apply text-inherit;
+
+        &:is(:where(a):not(:where([class~="not-prose"], [class~="not-prose"] *))) {
+          @apply border-warning-800;
+        }
+      }
+    }
+
+    &.info {
+      @apply bg-info-300;
+
+      :not(pre) > code {
+        @apply bg-info-200 text-info-800;
+      }
+
+      .custom-block-title {
+        &::before {
+          content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>');
+          @apply font-semibold h-5 w-5 inline-block mr-1 mb-[2px] align-middle;
+        }
+      }
+
+      :is(a) {
+        @apply text-inherit;
+
+        &:is(:where(a):not(:where([class~="not-prose"], [class~="not-prose"] *))) {
+          @apply border-info-800;
+        }
+      }
+    }
+
+    &.tip {
+      @apply bg-success-300;
+
+      :not(pre) > code {
+        @apply bg-success-200 text-success-800;
+      }
+
+      .custom-block-title {
+        &::before {
+          content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.468 5.99 5.99 0 0 0-1.925 3.547 5.975 5.975 0 0 1-2.133-1.001A3.75 3.75 0 0 0 12 18Z" /></svg>');
+          @apply font-semibold h-5 w-5 inline-block mr-1 mb-[3px] align-middle;
+        }
+      }
+
+      :is(a) {
+        @apply text-inherit;
+
+        &:is(:where(a):not(:where([class~="not-prose"], [class~="not-prose"] *))) {
+          @apply border-success-800;
+        }
+      }
+    }
+
+    &.danger {
+      @apply bg-danger-300;
+
+      :not(pre) > code {
+        @apply bg-danger-200 text-danger-800;
+      }
+
+      .custom-block-title {
+        &::before {
+          content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>');
+          @apply font-semibold h-5 w-5 inline-block mr-1 mb-[2px] align-middle;
+        }
+      }
+
+      :is(a) {
+        @apply text-inherit;
+
+        &:is(:where(a):not(:where([class~="not-prose"], [class~="not-prose"] *))) {
+          @apply border-danger-800;
+        }
+      }
+    }
+
+    &.abstract {
+      @apply bg-surface-300;
+
+      :not(pre) > code {
+        @apply bg-surface-200 text-surface-800;
+      }
+
+      .custom-block-title {
+        &::before {
+          content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" /></svg>');
+          @apply font-semibold h-5 w-5 inline-block mr-1 mb-[2px] align-middle;
+        }
+      }
+
+      :is(a) {
+        @apply text-inherit;
+
+        &:is(:where(a):not(:where([class~="not-prose"], [class~="not-prose"] *))) {
+          @apply border-zinc-800;
+        }
+      }
+    }
+  }
+
+  :is(img) {
+    zoom: 50%;
+  }
+
+  :where(blockquote):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+    quotes: none;
+    @apply font-normal text-sm italic text-surface-600 border-l-2 border-primary-500 mt-8 mb-10 pl-4 dark:text-surface-400;
+  }
+}
+
+.dark .prose-a :is(:where(a):not(:where([class~="not-prose"], [class~="not-prose"] *))) {
+  @apply border-[var(--tw-prose-invert-links)];
+}
+
+/* Table of Contents */
+@screen xl {
+  .table-of-contents {
+    @apply hidden;
+  }
+}
+
+.kbd {
+  background: linear-gradient(-225deg, theme("colors.gray.300") 0%, theme("colors.stone.50") 100%);
+  box-shadow:
+    inset 0 -2px 0 0 theme("colors.slate.300"),
+    inset 0 0 1px 1px theme("colors.white"),
+    0 1px 2px 1px rgba(30 35 90 / 0.4);
+}
+.dark {
+  .kbd {
+    background: linear-gradient(-225deg, theme("colors.surface.700") 0%, theme("colors.surface.500") 100%);
+    box-shadow:
+      inset 0 -2px 0 0 theme("colors.surface.800"),
+      inset 0 0 1px 1px theme("colors.surface.500"),
+      0 1px 2px 1px theme("colors.surface.950/40");
+  }
+}

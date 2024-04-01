@@ -1,0 +1,8 @@
+/node_modules
+/.vscode
+.DS_Store
+.idea
+/.vitepress/cache
+/dist
+.env
+package-lock.json
