@@ -170,7 +170,7 @@ const year = date.getFullYear();
       </Card>
       <Card color="primary">
         <template #heading>
-          <img class="w-auto h-8 mr-3" src="/zilla.svg" alt="" />
+          <img class="w-auto h-8 mr-3" src="/logo.svg" alt="" />
           <h3 class="text-2xl font-medium text-warning-950">Tools & Features</h3>
         </template>
         <template #content>

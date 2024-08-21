@@ -13,6 +13,8 @@ export function usePrevNext() {
     return theme.value.sidebar[activeMenu.value] || [];
   });
 
+  const cleanText = (text) => text.replace(/^- /, '');
+
   return computed(() => {
     // Ensure sidebar.value is defined before calling getFlatSideBarLinks
     const candidates = sidebar.value ? getFlatSideBarLinks(sidebar.value) : [];
@@ -21,10 +23,11 @@ export function usePrevNext() {
       return isActive(page.value.relativePath, link.link);
     });
 
-    const prev = index > 0 ? { text: candidates[index - 1].text, link: candidates[index - 1].link } : undefined;
+    const prev =
+      index > 0 ? { text: cleanText(candidates[index - 1].text), link: candidates[index - 1].link } : undefined;
     const next =
       index >= 0 && index < candidates.length - 1
-        ? { text: candidates[index + 1].text, link: candidates[index + 1].link }
+        ? { text: cleanText(candidates[index + 1].text), link: candidates[index + 1].link }
         : undefined;
 
     return { prev, next };
