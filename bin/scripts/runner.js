@@ -35,7 +35,7 @@ const runGenerateSidebar = async () => {
 
 const runGenerateIndex = async () => {
   if (siteConfig.themeConfig.search.provider === 'meilisearch') {
-    if (process.env.SEARCH_LOCAL && process.env.SEARCH_KEY) {
+    if (process.env.SEARCH_HOST && process.env.ADMIN_KEY) {
       await generateIndex();
     } else {
       logWithColor('Either switch your search provider to local or set the required keys in your .env file.', 'red');
