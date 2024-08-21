@@ -5,4 +5,6 @@
 /.vitepress/cache
 /dist
 .env
+.env.prod
+.deploy-script
 package-lock.json
