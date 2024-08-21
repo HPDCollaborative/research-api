@@ -22,8 +22,8 @@ export default defineConfigWithTheme({
       lazyLoading: true,
     },
     theme: {
-      light: 'dracula',
-      dark: 'dracula',
+      light: 'aurora-x',
+      dark: 'aurora-x',
     },
     anchor: {
       permalink: undefined,
@@ -71,11 +71,11 @@ export default defineConfigWithTheme({
       page: '',
     },
     copyright: 'Health Product Declaration Collaborative, Inc',
-    githubUrl: false,
+    githubUrl: 'https://github.com/HPDCollaborative/research-api-documents',
     gitlabUrl: false,
-    twitterUrl: false,
+    twitterUrl: 'https://x.com/HPDStandard',
     search: {
-      provider: 'local', // local or meilisearch only
+      provider: process.env.SEARCH_TYPE, // local or meilisearch only
       options: {
         placeholder: 'Search ...',
         host: process.env.SEARCH_HOST,
