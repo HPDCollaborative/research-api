@@ -1,4 +1,4 @@
-// runTask.js
+// @ts-nocheck
 import { runPullVersions, runGenerateVersions, runGenerateSidebar, runGenerateIndex } from './scripts/runner.js';
 
 const task = process.argv[2]; // Get the task name from command-line arguments

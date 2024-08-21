@@ -1,3 +1,4 @@
+// @ts-nocheck
 export const defaultColors = {
   inherit: 'inherit',
   current: 'currentColor',

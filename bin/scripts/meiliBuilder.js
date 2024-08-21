@@ -1,3 +1,4 @@
+// @ts-nocheck
 import fs from 'fs';
 import https from 'https';
 import siteConfig from '../../.vitepress/config.js';
@@ -14,8 +15,8 @@ async function indexSearchData() {
   });
 
   const client = new MeiliSearch({
-    host: process.env.SEARCH_LOCAL,
-    apiKey: process.env.SEARCH_KEY,
+    host: process.env.SEARCH_HOST,
+    apiKey: process.env.ADMIN_KEY,
     httpsAgent,
   });
 
@@ -24,6 +25,13 @@ async function indexSearchData() {
     const index = client.index(indexName);
 
     const data = JSON.parse(fs.readFileSync('.vitepress/theme/data/search.json', 'utf8'));
+
+    try {
+      const response = await index.deleteAllDocuments();
+      logWithColor(`Task #${response.taskUid} has been ${response.status}.`, 'green');
+    } catch (delError) {
+      logWithColor(`An unexpected response was received from Meilisearch: ${delError.message}`, 'red');
+    }
 
     try {
       const response = await index.addDocuments(data);

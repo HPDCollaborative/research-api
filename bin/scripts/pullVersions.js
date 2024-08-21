@@ -1,3 +1,4 @@
+// @ts-nocheck
 import fs from 'fs';
 import path from 'path';
 import { exec } from 'child_process';
@@ -13,27 +14,41 @@ const cloneOrUpdate = (version) => {
     const versionDir = path.join(__dirname, '../../src', version);
 
     if (fs.existsSync(versionDir)) {
-      logWithColor(`Pulling latest documentation updates for ${version}...`, 'yellow');
-      exec(`cd ${versionDir} && git pull`, (error, stdout, stderr) => {
-        if (error) {
-          logWithColor(`Error pulling updates for ${version}: ${error}`, 'red');
-          reject(error);
+      logWithColor(`Removing and recloning ${version}...`, 'yellow');
+      exec(`rm -rf "${versionDir}"`, (rmError) => {
+        if (rmError) {
+          logWithColor(`Error removing ${version} directory: ${rmError}`, 'red');
+          reject(rmError);
           return;
         }
-        logWithColor(`Updates for ${version} pulled successfully.`, 'green');
-        resolve(stdout);
+
+        exec(
+          `git clone --single-branch --branch ${version} ${REPO_URL} "${versionDir}" && rm -rf "${versionDir}/.github"`,
+          (cloneError, stdout, stderr) => {
+            if (cloneError) {
+              logWithColor(`Error cloning ${version}: ${cloneError}`, 'red');
+              reject(cloneError);
+              return;
+            }
+            logWithColor(`${version} cloned successfully.`, 'green');
+            resolve(stdout);
+          }
+        );
       });
     } else {
       logWithColor(`Cloning ${version}...`, 'yellow');
-      exec(`git clone --single-branch --branch ${version} ${REPO_URL} "${versionDir}"`, (error, stdout, stderr) => {
-        if (error) {
-          logWithColor(`Error cloning ${version}: ${error}`, 'red');
-          reject(error);
-          return;
+      exec(
+        `git clone --single-branch --branch ${version} ${REPO_URL} "${versionDir}" && rm -rf "${versionDir}/.github"`,
+        (error, stdout, stderr) => {
+          if (error) {
+            logWithColor(`Error cloning ${version}: ${error}`, 'red');
+            reject(error);
+            return;
+          }
+          logWithColor(`${version} cloned successfully.`, 'green');
+          resolve(stdout);
         }
-        logWithColor(`${version} cloned successfully.`, 'green');
-        resolve(stdout);
-      });
+      );
     }
   });
 };

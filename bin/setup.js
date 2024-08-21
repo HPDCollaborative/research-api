@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { logWithColor } from './scripts/logger.js';
 import { runPullVersions, runGenerateVersions, runGenerateSidebar, runGenerateIndex } from './scripts/runner.js';
 
