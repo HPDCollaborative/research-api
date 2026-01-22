@@ -1,1 +1,502 @@
-[]
+[
+  {
+    "id": 1,
+    "title": "Intended Purpose",
+    "category": "Introduction",
+    "version": "2.3",
+    "header": "Overview",
+    "slug": "overview",
+    "content": "This documentation is here to provide a reference for both incoming and outgoing data streams of the HPD Research API for HPD Collaborative Open Standard v2.3. While outgoing data structures are not required to match the patterns described herein, it's recommended to follow these standard for consistency. All incoming property values are set to Pascal Case and must be sent/received using exact Pascal Cased names shown here. TIPUse the Versions dropdown menu top right of the page to view other versions of the documentation.",
+    "url": "/2.3#overview"
+  },
+  {
+    "id": 2,
+    "title": "Intended Purpose",
+    "category": "Introduction",
+    "version": "2.3",
+    "header": "What to Expect",
+    "slug": "what-to-expect",
+    "content": "On each doc page you'll find a Structure section which will illustrate the shape of the data with type values, and then all properties available for the given data structure. Let's make up a data object example widget.",
+    "url": "/2.3#what-to-expect"
+  },
+  {
+    "id": 3,
+    "title": "Intended Purpose",
+    "category": "Introduction",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json{ \"Name\": \"<string>\", \"Quantity\": \"<int>\", \"Amount\": \"<float>\", \"Status\": \"<bool>\", \"Options\": \"<array|null>\" } # Name type: <string>required: true INFOOccasionally you'll see additional notes if something needs to be noted or explained. Otherwise this box will not appear at all. # Quantity type: <int>required: true IMPORTANTMake sure you pay attention to yellow warning and red danger boxes for items that need special attention. # Amount type: <float>required: true WARNINGNumerical props will come in either <int>, <float> or <decimal>, make sure you note this in your internal storage. # Status type: <bool>required: true # Options type: <array>related: Optionsrequired: falsedefault: <null|string> TIPOnly props that are NOT required will have a default value, if at all. Props that show a related option are linked to their related data object. If you have any questions or issues, this repository is public so you can feel free to open a discussion at Github.",
+    "url": "/2.3#structure"
+  },
+  {
+    "id": 4,
+    "title": "Listings",
+    "category": "Content",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "Listings, if included, exist as an array of Listing objects listed with the key of Listings and are structured as follows: json[ // Start of \"Listings\" array { \"Listing\": \"<string>\", \"Agency\": \"<string>\", \"Notification\": \"<string>\" } ... ] DIFF 2.2 > 2.3 diff+ \"Listings\": [ + { + \"Listing\": \"<string>\", + \"Agency\": \"<string>\", + \"Notification\": \"<string>\" + } + ] # Listing type: <string>required: true # Agency type: <string>required: true # Notification type: <string>required: true",
+    "url": "/2.3/content/substances/listings#structure"
+  },
+  {
+    "id": 5,
+    "title": "Substances",
+    "category": "Content",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "Substances, if included, exist as an array of Substance objects listed with the key of Substances and are structured as follows: json[ // Start of \"Substances\" array { \"Name\": \"<string>\", \"CasRn\": \"<string>\", \"GreenScreen\": \"<string>\", \"ScreeningEngine\": \"<string>\", \"Min\": \"<float>\", \"Max\": \"<float>\", \"Residual\": \"<string>\", \"Recycle\": \"<string>\", \"AlternateOf\": \"<object|string>\", \"Nano\": \"<bool>\", \"Role\": \"<string>\", \"Notes\": \"<string>\", \"ScreenedAt\": \"<timestamp>\", \"Hazards\": \"<array>\", \"Listings\": \"<array>\", \"Locations\": \"<array>\" }, ... ] DIFF 2.2 > 2.3 diff- \"Payload\": \"<array>\" - \"Residual\": \"<bool>\" + \"ScreeningEngine\": \"<string>\", + \"AlternateOf\": \"<object|string>\" + \"Residual\": \"<string>\" + \"Listings\": \"<array>\" + \"Locations\": \"<array>\" # Name type: <string>required: true # CasRn type: <string>required: true # GreenScreen type: <string>required: true # Min type: <float>required: true # Max type: <float>required: false # Residual type: <string>required: true # Recycle type: <string>required: true # AlternateOf type: <object>required: falserelated: Substancedefault: null|string CAUTIONAlternateOf for a Substance is now a reference to a primary Substance within the same NestedMaterial. # Nano type: <string>required: true # Role type: <string>required: true # Notes type: <string>required: falsedefault: string # ScreenedAt type: <string>required: true # Hazards type: <array>required: falserelated: Hazardsdefault: string # Listings type: <array>required: falserelated: Listingsdefault: string # Locations type: arrayrequired: falserelated: Locationsdefault: string",
+    "url": "/2.3/content/substances#structure"
+  },
+  {
+    "id": 6,
+    "title": "Hazards",
+    "category": "Content",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "Hazards, if included, exist as an array of Hazard objects listed with the key of Hazards and are structured as follows: json[ // Start of \"Hazards\" array { \"Name\": \"<string>\", \"List\": \"<string>\", \"Endpoint\": \"<string>\", \"Abbreviation\": \"<string>\" } ... ] # Name type: <string>required: true # List type: <string>required: true # Endpoint type: <string>required: true # Abbreviation type: <string>required: true",
+    "url": "/2.3/content/substances/hazards#structure"
+  },
+  {
+    "id": 7,
+    "title": "Materials",
+    "category": "Content",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "Materials exist as an array of Material objects listed with the key of Materials and are structured as follows: json[ // Start of \"Materials\" array { \"Name\": \"<string>\", \"Condition\": \"<object>\", \"Min\": \"<float>\", \"Max\": \"<float>\", \"AlternateOf\": \"<object>\", \"Recycle\": \"<string>\", \"Nano\": \"<bool>\", \"Role\": \"<string>\", \"Notes\": \"<string>\", \"Locations\": \"<decimal:10,7|string>\" } ... ] DIFF 2.2 > 2.3 diff+ \"Condition\": \"<object>\" + \"AlternateOf\": \"<object>\" + \"Locations\": \"<decimal:10,7|string>\" - \"Alternate\": \"<string>\" - \"Reportable\": \"<string>\" - \"HpdUrl\": \"<string>\" - \"Threshold\": \"<string>\" - \"Residuals\": \"<string>\" - \"ResidualNotes\": \"<string>\" - \"MaterialType\": \"<string>\" - \"Substances\": \"<string>\" # Name type: <string>required: true # Condition type: <object>required: truerelated: 1 of 6 Special Conditions BiologicalGeologicalMixed ContentElectronicsFastenersMetal Alloys # Min type: <float>required: true # Max type: <float>required: false # AlternateOf type: <object>required: falserelated: Materialdefault: null|string CAUTIONAlternateOf for a Materials is now a reference to a primary Material within the same Nested Material. # Recycle type: <string>required: true # Nano type: <bool>required: true # Role type: <string>required: true # Notes type: <string>required: false # Locations type: arrayrequired: falserelated: Locationsdefault: string",
+    "url": "/2.3/content/materials#structure"
+  },
+  {
+    "id": 8,
+    "title": "Electronics Material",
+    "category": "Uncategorized",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "Electronics Material is an object that can be attached to a Material object under the Condition key. json{ \"ElectronicComponent\": { \"IngredientDescription\": \"<string>\", \"Compliance\": \"<string>\", \"ComplianceExemptions\": \"<string>\", \"Takeback\": \"<string>\", \"OtherEolExplanation\": \"<string>\" } } DIFF 2.2 > 2.3 diff+ \"ElectronicComponent\": { + \"IngredientDescription\": \"<string>\", + \"Compliance\": \"<string>\", + \"ComplianceExemptions\": \"<string>\", + \"Takeback\": \"<string>\", + \"OtherEolExplanation\": \"<string>\" + } # IngredientDescription type: <string>required: true # Compliance type: <string>required: true # ComplianceExemptions type: <string>required: true # Takeback type: <string>required: true # OtherEolExplanation type: <string>required: true",
+    "url": "/2.3/content/materials/electronics#structure"
+  },
+  {
+    "id": 9,
+    "title": "Biological Material",
+    "category": "Uncategorized",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "Biological Material is an object that can be attached to a Material object under the Condition key. json{ \"BiologicalMaterial\": { \"Category\": \"<string>\", \"IngredientDescription\": \"<string>\" } } DIFF 2.2 > 2.3 diff+ \"BiologicalMaterial\": { + \"Category\": \"<string>\", + \"IngredientDescription\": \"<string>\" + } # Category type: <string>required: true # IngredientDescription type: <string>required: true",
+    "url": "/2.3/content/materials/biological#structure"
+  },
+  {
+    "id": 10,
+    "title": "Mixed Recycled Content Material",
+    "category": "Uncategorized",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "Mixed Recycled Content Material is an object that can be attached to a Material object under the Condition key. json{ \"MixedRecycledContent\": { \"IngredientDescription\": \"<string>\", \"TestingPerformed\": \"<string>\", \"TestingDescription\": \"<string>\", \"BatchVariation\": \"<string>\", \"VariationDescription\": \"<string>\", \"CountryOfOrigin\": \"<string>\", \"MissingInformation\": \"<string>\" } } DIFF 2.2 > 2.3 diff+ \"MixedRecycledContent\": { + \"IngredientDescription\": \"<string>\", + \"TestingPerformed\": \"<string>\", + \"TestingDescription\": \"<string>\", + \"BatchVariation\": \"<string>\", + \"VariationDescription\": \"<string>\", + \"CountryOfOrigin\": \"<string>\", + \"MissingInformation\": \"<string>\" + } # IngredientDescription type: <string>required: true # TestingPerformed type: <string>required: true # TestingDescription type: <string>required: true # BatchVariation type: <string>required: true # VariationDescription type: <string>required: true # CountryOfOrigin type: <string>required: true # MissingInformation type: <string>required: true",
+    "url": "/2.3/content/materials/mixed-content#structure"
+  },
+  {
+    "id": 11,
+    "title": "Metal Alloys Material",
+    "category": "Uncategorized",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "Metal Alloys Material is an object that can be attached to a Material object under the Condition key. json{ \"MetalAlloy\": { \"UnsOrEnIdentifier\": \"<string>\", \"MetalAlloyHpd\": \"<string>\", \"GreenScreenAlloyingElements\": \"<string>\", \"ListingNotes\": \"<string>\" } } DIFF 2.2 > 2.3 diff+ \"MetalAlloy\": { + \"UnsOrEnIdentifier\": \"<string>\", + \"MetalAlloyHpd\": \"<string>\", + \"GreenScreenAlloyingElements\": \"<string>\", + \"ListingNotes\": \"<string>\" + } # UnsOrEnIdentifier type: <string>required: true # MetalAlloyHpd type: <string>required: true # GreenScreenAlloyingElements type: <string>required: true # ListingNotes type: <string>required: true",
+    "url": "/2.3/content/materials/metal-alloys#structure"
+  },
+  {
+    "id": 12,
+    "title": "Geological Material",
+    "category": "Uncategorized",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "Geological Material is an object that can be attached to a Material object under the Condition key. json{ \"GeologicalMaterial\": { \"Origin\": \"<string>\", \"IngredientComposition\": \"<string>\", \"PotentialPresenceOfToxicMaterials\": \"<string>\", \"ToxicMaterialDescription\": \"<string>\", \"PresenceOfRadioactiveElements\": \"<string>\", \"RadioactiveElementDescription\": \"<string>\" } } DIFF 2.2 > 2.3 diff+ \"GeologicalMaterial\": { + \"Origin\": \"<string>\", + \"IngredientComposition\": \"<string>\", + \"PotentialPresenceOfToxicMaterials\": \"<string>\", + \"ToxicMaterialDescription\": \"<string>\", + \"PresenceOfRadioactiveElements\": \"<string>\", + \"RadioactiveElementDescription\": \"<string>\" + } # Origin type: <string>required: true # IngredientComposition type: <string>required: true # PotentialPresenceOfToxicMaterials type: <string>required: true # ToxicMaterialDescription type: <string>required: true # PresenceOfRadioactiveElements type: <string>required: true # RadioactiveElementDescription type: <string>required: true",
+    "url": "/2.3/content/materials/geological#structure"
+  },
+  {
+    "id": 13,
+    "title": "Minor Fasteners Material",
+    "category": "Uncategorized",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "Minor Fasteners Material is an object that can be attached to a Material object under the Condition key. json{ \"MinorFastener\": { \"ComponentComposition\": \"<string>\", \"EuRohsConformance\": \"<string>\", \"EuReachSvhcContent\": \"<string>\", \"EuRohsExemptions\": \"<string>\", \"SvhcDeclaration\": \"<string>\", \"LbcRedListCompliance\": \"<string>\", \"SpecialConditionThresholdDeclaration\": \"<string>\" } } DIFF 2.2 > 2.3 diff+ \"MinorFastener\": { + \"ComponentComposition\": \"<string>\", + \"EuRohsConformance\": \"<string>\", + \"EuReachSvhcContent\": \"<string>\", + \"EuRohsExemptions\": \"<string>\", + \"SvhcDeclaration\": \"<string>\", + \"LbcRedListCompliance\": \"<string>\", + \"SpecialConditionThresholdDeclaration\": \"<string>\" + } # ComponentComposition type: <string>required: true # EuRohsConformance type: <string>required: true # EuReachSvhcContent type: <string>required: true # EuRohsExemptions type: <string>required: true # SvhcDeclaration type: <string>required: true # LbcRedListCompliance type: <string>required: true # SpecialConditionThresholdDeclaration type: <string>required: true",
+    "url": "/2.3/content/materials/fasteners#structure"
+  },
+  {
+    "id": 14,
+    "title": "Introduction",
+    "category": "Content",
+    "version": "2.3",
+    "header": "Overview",
+    "slug": "overview",
+    "content": "The Content section represents the heart of an HPD. This is where you'll find: Nested MaterialsSubstancesMaterials (formerly Special Conditions)HazardsAdditional ListingsPolymersLocations",
+    "url": "/2.3/content#overview"
+  },
+  {
+    "id": 15,
+    "title": "Introduction",
+    "category": "Content",
+    "version": "2.3",
+    "header": "Inventory Reporting Format",
+    "slug": "inventory-reporting-format",
+    "content": "HPDs can be created with two different inventory reporting formats: Nested Materials MethodBasic Method It's important to note that internally the same data structure is used for both. So in all cases, a Nested Materials array will be returned as the top level element in Content. IMPORTANTJust to reiterate and be clear, both Nested and Basic inventories will return an array of Nested Materials as the top level element in Content. Basic (method) will always return a single Nested Material, where Nested (method) can return many.",
+    "url": "/2.3/content#inventory-reporting-format"
+  },
+  {
+    "id": 16,
+    "title": "Polymers",
+    "category": "Content",
+    "version": "2.3",
+    "header": "Overview",
+    "slug": "overview",
+    "content": "Polymers are a new addition to the Nested Materials array of objects and are submitted through the Builder in 3 different types: With CASRNWithout CASRNUnwilling to Share Polymers, if included, exist as an array of Polymer objects listed with the key of Polymers and are structured based on the links above.",
+    "url": "/2.3/content/polymers#overview"
+  },
+  {
+    "id": 17,
+    "title": "Polymer without CASRN",
+    "category": "content",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "Polymer without CASRN is a variation of Polymers and will be found within the Polymers array. json[ // Start \"Polymers\" array { \"Name\": \"<string>\", \"Identifier\": \"<string>\", \"GreenScreen\": \"<string>\", \"ScreeningEngine\": \"<string>\", \"Min\": \"<float>\", \"Max\": \"<float>\", \"Residual\": \"<string>\", \"Recycle\": \"<string>\", \"AlternateOf\": \"<object|string>\", \"Nano\": \"<string>\", \"Role\": \"<string>\", \"PolymerType\": \"<string>\", \"AverageMolecularWeight\": \"<string>\", \"PercentOfMolecularWeightLessThan500Da\": \"<string>\", \"AdditionalSubstancesConsidered\": \"<string|null>\", \"GHSHazardStatements\": \"<string>\", \"HazardScreeningCompliance\": \"<string>\", \"PolymerNotes\": \"<string>\", \"AdditionalNotes\": \"<string>\", \"ScreenedAt\": \"<string>\", \"Locations\": \"<array>\", } ... ] DIFF 2.2 > 2.3 diff+ \"Polymers\": { + \"Name\": \"<string>\", + \"Identifier\": \"<string>\", + \"GreenScreen\": \"<string>\", + \"ScreeningEngine\": \"<string>\", + \"Min\": \"<float>\", + \"Max\": \"<float>\", + \"Residual\": \"<string>\", + \"Recycle\": \"<string>\", + \"AlternateOf\": \"<object|string>\", + \"Nano\": \"<string>\", + \"Role\": \"<string>\", + \"PolymerType\": \"<string>\", + \"AverageMolecularWeight\": \"<string>\", + \"PercentOfMolecularWeightLessThan500Da\": \"<string>\", + \"AdditionalSubstancesConsidered\": \"<string|null>\", + \"GHSHazardStatements\": \"<string>\", + \"HazardScreeningCompliance\": \"<string>\", + \"PolymerNotes\": \"<string>\", + \"AdditionalNotes\": \"<string>\", + \"ScreenedAt\": \"<string>\", + \"Locations\": \"<array>\", + } # Name type: <string>required: true # Identifier type: <string>required: true # GreenScreen type: <string>required: true # ScreeningEngine type: <string>required: true # Min type: <float>required: true # Max type: <float>required: false # Residual type: <string>required: true # Recycle type: <string>required: true # AlternateOf type: <object>required: falserelated: Polymerdefault: null|string CAUTIONAlternateOf for a Polymer is now a reference to a primary Polymer within the same NestedMaterial. # Nano type: <string>required: true # Role type: <string>required: true # PolymerType type: <string>required: true # AverageMolecularWeight type: <string>required: true # PercentOfMolecularWeightLessThan500Da type: <string>required: true # AdditionalSubstancesConsidered type: <string>required: true # GHSHazardStatements type: <string>required: true # HazardScreeningCompliance type: <string>required: true # PolymerNotes type: <string>required: true # AdditionalNotes type: <string>required: falsedefault: string # ScreenedAt type: <string>required: true # Locations type: arrayrequired: falserelated: Locationsdefault: string",
+    "url": "/2.3/content/polymers/without-casrn#structure"
+  },
+  {
+    "id": 18,
+    "title": "Polymer with CASRN",
+    "category": "content",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "Polymer with CASRN is a variation of Polymers and will be found within the Polymers array. json[ // Start \"Polymers\" array { \"Name\": \"<string>\", \"CasRn\": \"<string>\", \"GreenScreen\": \"<string>\", \"ScreeningEngine\": \"<string>\", \"Min\": \"<float>\", \"Max\": \"<float>\", \"Residual\": \"<string>\", \"Recycle\": \"<string>\", \"AlternateOf\": \"<object|string>\", \"Nano\": \"<string>\", \"Role\": \"<string>\", \"PolymerType\": \"<string>\", \"AverageMolecularWeight\": \"<string>\", \"PercentOfMolecularWeightLessThan500Da\": \"<string>\", \"AdditionalSubstancesConsidered\": \"<string>\", \"PolymerNotes\": \"<string>\", \"AdditionalNotes\": \"<string>\", \"ScreenedAt\": \"<string>\", \"ChemForward\": \"<string>\", \"Hazards\": \"<array>\", \"Listings\": \"<array>\", \"Locations\": \"<array>\", } ... ] DIFF 2.2 > 2.3 diff+ \"Polymers\": [ + { + \"Name\": \"<string>\", + \"CasRn\": \"<string>\", + \"GreenScreen\": \"<string>\", + \"ScreeningEngine\": \"<string>\", + \"Min\": \"<float>\", + \"Max\": \"<float>\", + \"Residual\": \"<string>\", + \"Recycle\": \"<string>\", + \"AlternateOf\": \"<object|string>\", + \"Nano\": \"<string>\", + \"Role\": \"<string>\", + \"PolymerType\": \"<string>\", + \"AverageMolecularWeight\": \"<string>\", + \"PercentOfMolecularWeightLessThan500Da\": \"<string>\", + \"AdditionalSubstancesConsidered\": \"<string>\", + \"PolymerNotes\": \"<string>\", + \"AdditionalNotes\": \"<string>\", + \"ScreenedAt\": \"<string>\", + \"ChemForward\": \"<string>\", + \"Hazards\": \"<array>\", + \"Listings\": \"<array>\", + \"Locations\": \"<array>\", + } + ] # Name type: <string>required: true # CasRn type: <string>required: true # GreenScreen type: <string>required: true # ScreeningEngine type: <string>required: true # Min type: <float>required: true # Max type: <float>required: false # Residual type: <string>required: true # Recycle type: <string>required: true # AlternateOf type: <object>required: falserelated: Polymerdefault: null|string CAUTIONAlternateOf for a Polymer is now a reference to a primary Polymer within the same NestedMaterial. # Nano type: <string>required: true # Role type: <string>required: true # PolymerType type: <string>required: true # AverageMolecularWeight type: <string>required: true # PercentOfMolecularWeightLessThan500Da type: <string>required: true # AdditionalSubstancesConsidered type: <string>required: true # PolymerNotes type: <string>required: true # AdditionalNotes type: <string>required: falsedefault: string # ScreenedAt type: <string>required: true # ChemForward type: <string>required: true WARNINGNot yet implemented as of 8.1.2024 # Hazards type: <array>required: falserelated: Hazardsdefault: string # Listings type: <array>required: falserelated: Listingsdefault: string # Locations type: arrayrequired: falserelated: Locationsdefault: string",
+    "url": "/2.3/content/polymers/with-casrn#structure"
+  },
+  {
+    "id": 19,
+    "title": "Polymer - Unwilling to Share",
+    "category": "content",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "Polymer - Unwilling to Share is a variation of Polymers and will be found within the Polymers array. json[ // Start \"Polymers\" array { \"Name\": \"<string>\", \"Identifier\": \"<string>\", \"GreenScreen\": \"<string>\", \"ScreeningEngine\": \"<string>\", \"Min\": \"<float>\", \"Max\": \"<float>\", \"Residual\": \"<string>\", \"Recycle\": \"<string>\", \"AlternateOf\": \"<object|string>\", \"Nano\": \"<string>\", \"Role\": \"<string>\", \"PolymerType\": \"<string>\", \"AverageMolecularWeight\": \"<string>\", \"PercentOfMolecularWeightLessThan500Da\": \"<string>\", \"AdditionalSubstancesConsidered\": \"<string|null>\", \"GHSHazardStatements\": \"<string>\", \"HazardScreeningCompliance\": \"<string>\", \"PolymerNotes\": \"<string>\", \"AdditionalNotes\": \"<string>\", \"ScreenedAt\": \"<string>\", \"Locations\": \"<array>\", } ... ] DIFF 2.2 > 2.3 diff+ \"Polymers\": { + \"Name\": \"<string>\", + \"Identifier\": \"<string>\", + \"GreenScreen\": \"<string>\", + \"ScreeningEngine\": \"<string>\", + \"Min\": \"<float>\", + \"Max\": \"<float>\", + \"Residual\": \"<string>\", + \"Recycle\": \"<string>\", + \"AlternateOf\": \"<object|string>\", + \"Nano\": \"<string>\", + \"Role\": \"<string>\", + \"PolymerType\": \"<string>\", + \"AverageMolecularWeight\": \"<string>\", + \"PercentOfMolecularWeightLessThan500Da\": \"<string>\", + \"AdditionalSubstancesConsidered\": \"<string|null>\", + \"GHSHazardStatements\": \"<string>\", + \"HazardScreeningCompliance\": \"<string>\", + \"PolymerNotes\": \"<string>\", + \"AdditionalNotes\": \"<string>\", + \"ScreenedAt\": \"<string>\", + \"Locations\": \"<array>\", + } # Name type: <string>required: truedefault: Undisclosed CAUTIONThis will always return Undisclosed # Identifier type: <string>required: truedefault: Undisclosed CAUTIONThis will always return Undisclosed # GreenScreen type: <string>required: true # ScreeningEngine type: <string>required: true # Min type: <float>required: true # Max type: <float>required: false # Residual type: <string>required: true # Recycle type: <string>required: true # AlternateOf type: <object>required: falserelated: Polymerdefault: null|string CAUTIONAlternateOf for a Polymer is now a reference to a primary Polymer within the same NestedMaterial. # Nano type: <string>required: true # Role type: <string>required: true # PolymerType type: <string>required: true # AverageMolecularWeight type: <string>required: true # PercentOfMolecularWeightLessThan500Da type: <string>required: true # AdditionalSubstancesConsidered type: <string>required: true # GHSHazardStatements type: <string>required: true # HazardScreeningCompliance type: <string>required: true # PolymerNotes type: <string>required: true # AdditionalNotes type: <string>required: falsedefault: string # ScreenedAt type: <string>required: true # Locations type: arrayrequired: falserelated: Locationsdefault: string",
+    "url": "/2.3/content/polymers/undisclosed#structure"
+  },
+  {
+    "id": 20,
+    "title": "Nested Materials",
+    "category": "Content",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "Nested Materials exist as an array of NestedMaterial objects listed with the key of NestedMaterials and are structured as follows: json[ // Start of \"NestedMaterials\" array { \"Name\": \"<string>\", \"Min\": \"<float>\", \"Max\": \"<float>\", \"AlternateOf\": \"<object|string>\", \"NoReportableSubstances\": \"<bool>\", \"Threshold\": \"<int>\", \"Residuals\": \"<string>\", \"ResidualNotes\": \"<string>\", \"Notes\": \"<string>\", \"MaterialType\": \"<string>\", \"Substances\": \"<array|string>\", \"Materials\": \"<array|string>\", \"Polymers\": \"<array|string>\", \"Locations\": \"<array|string>\" }, ... ] DIFF 2.2 > 2.3 diff+ \"NestedMaterials\": [ + { + \"Name\": \"<string>\", + \"Min\": \"<float>\", + \"Max\": \"<float>\", + \"AlternateOf\": \"<object>\", + \"NoReportableSubstances\": \"<bool>\", + \"Threshold\": \"<int>\", + \"Residuals\": \"<string>\", + \"Notes\": \"<string>\", + \"ResidualNotes\": \"<string>\", + \"MaterialType\": \"<string>\", + \"Substances\": \"<array|string>\", + \"Materials\": \"<array|string>\", + \"Polymers\": \"<array|string>\", + \"Locations\": \"<array|string>\" + } + ] # Name type: <string>required: true # Min type: <float>required: true # Max type: <float>required: false # AlternateOf type: <object>required: falserelated: NestedMaterialdefault: null|string CAUTIONAlternateOf for a Nested Material is now a reference to a primary Nested Material within the same Record. # NoReportableSubstances type: <string>required: true # Threshold type: <string>required: true # Residuals type: <string>required: true # ResidualNotes type: <string>required: true # Notes type: <string>required: true # MaterialType type: <string>required: true # Substances type: arrayrequired: falserelated: Substancesdefault: string # Materials type: arrayrequired: falserelated: Materialsdefault: string # Polymers type: arrayrequired: falserelated: Polymersdefault: string DANGEREven though Substances, Materials and Polymers are marked as \"not required\" above, make sure you receive at least 1 of either. If none are present and the NoReportableSubstances prop is No, this is not a valid HPD. # Locations type: arrayrequired: falserelated: Locationsdefault: string",
+    "url": "/2.3/content/nested-materials#structure"
+  },
+  {
+    "id": 21,
+    "title": "Locations",
+    "category": "Content",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "Locations are implemented as a Social Equity Indicator and apply to Nested Materials, Substances, Materials and Polymers. json[ { \"Country\": \"<string>\", \"Latitude\": \"<decimal:10,7|string>\" , \"Longitude\": \"<decimal:10,7|string>\" , \"Stage\": \"<string>\", } ... ] DIFF 2.2 > 2.3 diff+ \"Locations\": [ + { + \"Country\": \"<string>\", + \"Latitude\": \"<decimal:10,7|string>\" , + \"Longitude\": \"<decimal:10,7|string>\" , + \"Stage\": \"<string>\", + } + ] # Country type: <string>required: true # Latitude type: <decimal:10,7|string>required: falsedefault: <null|string> # Longitude type: <decimal:10,7|string>required: falsedefault: <null|string> # Stage type: <string>required: true",
+    "url": "/2.3/content/locations#structure"
+  },
+  {
+    "id": 22,
+    "title": "Volatile Organic Compound",
+    "category": "Container",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json{ \"VocContent\": \"<int>\", \"Material\": \"<int>\", \"Regulatory\": \"<int>\", \"Exempt\": \"<string>\", \"Ultra\": \"<string>\" } # VocContent type: <int>required: true # Material type: <int>required: true # Regulatory type: <int>required: true # Exempt type: <string>required: true # Ultra type: <string>required: true",
+    "url": "/2.3/data/voc#structure"
+  },
+  {
+    "id": 23,
+    "title": "Data Container",
+    "category": "Container",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "The base data object should return the following JSON structure. json{ \"NumericId\": \"<int>\", \"DigitalId\": \"<string>\", \"RecordId\": \"<int>\", \"Build\": \"<string>\", \"FileName\": \"<string>\", \"Accessories\": \"<array>\", \"Certifications\": \"<array>\", \"Company\": \"<object>\", \"Content\": \"<object>\", \"General\": \"<object>\", \"Notes\": \"<object>\", \"Parts\": \"<array>\", \"Product\": \"<object>\", \"Reference\": \"<object>\", \"Voc\": \"<object>\", \"PublishedAt\": \"<timestamp>\", \"WithdrawnAt\": \"<timestamp>\", \"ScreenedAt\": \"<timestamp>\" } # NumericId type: <int>required: true # DigitalId type: <string>required: true # RecordId type: <int>required: true # Build type: <string>required: true # Filename type: <string>required: true # Accessories type: <array>required: falserelated: Accessoriesdefault: null|string # Certifications type: <array>required: truerelated: Certifications # Company type: <object>required: truerelated: Company # Content type: <object>required: truerelated: Content INFOThe content prop is simply a JSON object that wraps an HPD's content inventory. Content inventory details and structure, are documented in the Content Inventory section below. # General type: <object>required: truerelated: General TIPThe data object represents the Summary section of the HPD. # Notes type: <object>required: truerelated: Notes # Parts type: <array>required: falserelated: Partsdefault: null # Product type: <object>required: truerelated: Product # Reference type: <object>required: truerelated: Reference # Voc type: <object>required: truerelated: VOC # PublishedAt type: <timestamp>required: true # WithdrawnAt type: <timestamp>required: falsedefault: null # ScreenedAt type: <timestamp>required: true",
+    "url": "/2.3/data#structure"
+  },
+  {
+    "id": 24,
+    "title": "Parts",
+    "category": "Container",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json{ \"SupplierName\": \"<string>\", \"Name\": \"<string>\", \"Notes\": \"<string>\", \"Min\": \"<float>\", \"Max\": \"<float>\" } # SupplierName type: <string>required: true # Name type: <string>required: true # Notes type: <string>required: true # Min type: <float>required: true # Max type: <float>required: true",
+    "url": "/2.3/data/parts#structure"
+  },
+  {
+    "id": 25,
+    "title": "General Notes",
+    "category": "Container",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json{ \"General\": \"<string>\" } # General type: <string>required: falsedefault: null|string",
+    "url": "/2.3/data/notes#structure"
+  },
+  {
+    "id": 26,
+    "title": "Product",
+    "category": "Container",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json{ \"Name\": \"<string>\", \"Types\": \"<array>\" } # Name type: <string>required: true # Types type: arrayrequired: falserelated: Product Typesdefault: string",
+    "url": "/2.3/data/product#structure"
+  },
+  {
+    "id": 27,
+    "title": "Product Types",
+    "category": "Container",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json[ { \"Type\": \"<string>\", \"Definitions\": \"<string>\", \"Synonyms\": \"<string>\", \"Performance\": \"<string>\" } ], # Type type: <string>required: true # Definitions type: <string>required: false # Synonyms type: <string>required: false # Performance type: <string>required: false",
+    "url": "/2.3/data/product/types#structure"
+  },
+  {
+    "id": 28,
+    "title": "Reference",
+    "category": "Container",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json{ \"Address1\": \"<string>\", \"Address2\": \"<string>\", \"City\": \"<string>\", \"State\": \"<string>\", \"Postal\": \"<string>\", \"Country\": \"<string>\", \"Website\": \"<string>\", \"Contact\": \"<string>\", \"Title\": \"<string>\", \"Phone\": \"<string>\", \"Email\": \"<string>\", \"Latitude\": \"<decimal:10,7>\", \"Longitude\": \"<decimal:10,7>\", \"PreparedBy\": \"<string>\", \"VerifiedBy\": \"<string>\" } DIFF 2.2 > 2.3 diff+ \"Latitude\": \"<decimal:10,7>\", + \"Longitude\": \"<decimal:10,7>\", # Address1 type: <string>required: true # Address2 type: <string>required: falsedefault: null|string # City type: <string>required: true # State type: <string>required: true # Postal type: <string>required: true # Country type: <string>required: true # Website type: <string>required: true # Contact type: <string>required: true # Title type: <string>required: true # Phone type: <string>required: true # Email type: <string>required: true # Latitude type: <decimal:10,7>required: falsedefault: null|string # Longitude type: <decimal:10,7>required: falsedefault: null|string # PreparedBy type: <int>required: falsedefault: null|string # VerifiedBy type: <int>required: falsedefault: null|string",
+    "url": "/2.3/data/reference#structure"
+  },
+  {
+    "id": 29,
+    "title": "Company",
+    "category": "Container",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json{ \"Name\": \"<string>\" } # Name type: <string>required: true",
+    "url": "/2.3/data/company#structure"
+  },
+  {
+    "id": 30,
+    "title": "Certifications and Compliance",
+    "category": "Container",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json[ { \"Type\": \"<string>\", \"OtherType\": \"<string>\", \"Name\": \"<string>\", \"Voc\": \"<string>\", \"Party\": \"<string>\", \"Issue\": \"<date>\", \"Expire\": \"<date>\", \"Lab\": \"<string>\", \"Facilities\": \"<string>\", \"Website\": \"<string>\", \"Notes\": \"<string>\" } ] # Type type: <string>required: true # OtherType type: <string>required: falsedefault: null # Name type: <string>required: true # Voc type: <string>required: falsedefault: null # Party type: <string>required: true # Issue type: <date>required: falsedefault: null # Expire type: <date>required: falsedefault: null # Lab type: <string>required: falsedefault: null # Facilities type: <string>required: falsedefault: null # Website type: <string>required: falsedefault: null # Notes type: <string>required: falsedefault: null",
+    "url": "/2.3/data/certifications#structure"
+  },
+  {
+    "id": 31,
+    "title": "Summary",
+    "category": "Container",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json{ \"Classification\": \"<string>\", \"CsiDivision\": \"<string>\", \"CsiSection\": \"<string>\", \"Description\": \"<string>\", \"ThresholdType\": \"<string>\", \"InventoryNotes\": \"<string>\" } # Classification type: <string>required: falsedefault: null # CsiDivision type: <string>required: falsedefault: null # CsiSection type: <string>required: falsedefault: null # Description type: <string>required: falsedefault: null # ThresholdType type: <string>required: falsedefault: null # InventoryNotes type: <string>required: falsedefault: null",
+    "url": "/2.3/data/general#structure"
+  },
+  {
+    "id": 32,
+    "title": "Accessories",
+    "category": "Container",
+    "version": "2.3",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json[ { \"Name\": \"<string>\", \"Website\": \"<string>\", \"AccessoryType\": \"<string>\", \"Manufacturer\": \"<string>\", \"Notes\": \"<string>\" } ] DIFF 2.2 > 2.3 diff- \"Conditions\": \"<string>\" + \"AccessoryType\": \"<string>\" + \"Manufacturer\": \"<string>\" + \"Notes\": \"<string>\" # Name type: <string>required: true # Website type: <string>required: true # AccessoryType type: <string>required: true # Manufacturer type: <string>required: true # Notes type: <string>required: falsedefault: string",
+    "url": "/2.3/data/accessories#structure"
+  },
+  {
+    "id": 33,
+    "title": "Intended Purpose",
+    "category": "Introduction",
+    "version": "2.2",
+    "header": "Overview",
+    "slug": "overview",
+    "content": "This documentation is here to provide a reference for both incoming and outgoing data streams of the HPD Research API for HPD Collaborative Open Standard v2.2. WARNINGYou are viewing documentation for version 2.2 of the Open Standard which is no longer able to be published. For the latest version you should see version 2.3. While outgoing data structures are not required to match the patterns described herein, it's recommended to follow these standard for consistency. All incoming property values are set to Pascal Case and must be sent/received using exact Pascal Cased names shown here. TIPUse the Versions dropdown menu top right of the page to view other versions of the HPD Open Standard.",
+    "url": "/2.2#overview"
+  },
+  {
+    "id": 34,
+    "title": "Intended Purpose",
+    "category": "Introduction",
+    "version": "2.2",
+    "header": "What to Expect",
+    "slug": "what-to-expect",
+    "content": "On each doc page you'll find a Structure section which will illustrate the shape of the data with type values, and then all properties available for the given data structure. Let's make up a data object example widget.",
+    "url": "/2.2#what-to-expect"
+  },
+  {
+    "id": 35,
+    "title": "Intended Purpose",
+    "category": "Introduction",
+    "version": "2.2",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json{ \"Name\": \"<string>\", \"Quantity\": \"<int>\", \"Amount\": \"<float>\", \"Status\": \"<bool>\", \"Options\": \"<array|null>\" } # Name type: <string>required: true INFOOccasionally you'll see additional notes if something needs to be noted or explained. Otherwise this box will not appear at all. # Quantity type: <int>required: true IMPORTANTMake sure you pay attention to yellow warning and red danger boxes for items that need special attention. # Amount type: <float>required: true WARNINGNumerical props will come in either <int> or <float>, make sure you note this in your internal storage. # Status type: <bool>required: true INFOAlso watch for special Dev Notes which will provide additional code and are displayed in an accordion style panel with a right arrow as below: Dev NoteImportant coder life hack below:php$fun = (new Jamesons())->drink(function($bottle) { try { return Life::today->finish($bottle) ->without('spilling'); } catch (E $spillage) { return TikTok::post($spillage->video) ->then(Life::passout()) ->then(Life::tryAgainTomorrow()); } });Just kidding ... don't drink and code! But you get the idea.Most often what you'll see in this Dev Note is a diff reference from the previous version of the api. # Options type: <array>related: Optionsrequired: falsedefault: <null|string> TIPOnly props that are NOT required will have a default value, if at all. Props that show a related option are linked to their related data object. If you have any questions or issues, this repository is public so you can feel free to open a discussion at Github.",
+    "url": "/2.2#structure"
+  },
+  {
+    "id": 36,
+    "title": "Substances",
+    "category": "Content",
+    "version": "2.2",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json[ { \"Name\": \"<string>\", \"CasRn\": \"<string>\", \"GreenScreen\": \"<string>\", \"Payload\": \"<array>\", \"Min\": \"<float>\", \"Max\": \"<float>\", \"Residual\": \"<string>\", \"Recycle\": \"<bool>\", \"Nano\": \"<bool>\", \"Role\": \"<string>\", \"Notes\": \"<string>\", \"ScreenedAt\": \"<string>\", \"Hazards\": \"<array>\" } ] # Name type: <string>required: true # CasRn type: <string>required: false # GreenScreen type: <string>required: true # Payload type: <array>required: false # Min type: <float>required: true # Max type: <float>required: true # Name type: <string>required: true # Residual type: <string>required: true # Recycle type: <bool>required: true # Nano type: <string>required: true # Role type: <string>required: true # Notes type: <string>required: true # ScreenedAt type: <timestamp>required: true # Hazards type: <array>required: falserelated: Hazards",
+    "url": "/2.2/content/substances#structure"
+  },
+  {
+    "id": 37,
+    "title": "Hazards",
+    "category": "Content",
+    "version": "2.2",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json[ { \"Name\": \"<string>\", \"List\": \"<string>\", \"Endpoint\": \"<string>\", \"Abbreviation\": \"<string>\" } ... ] # Name type: <string>required: true # List type: <string>required: true # Endpoint type: <string>required: true # Abbreviation type: <string>required: true",
+    "url": "/2.2/content/substances/hazards#structure"
+  },
+  {
+    "id": 38,
+    "title": "Materials",
+    "category": "Content",
+    "version": "2.2",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json{ \"Name\": \"<string>\", \"Min\": \"<float>\", \"Max\": \"<float>\", \"Alternate\": \"<string>\", \"Reportable\": \"<string>\", \"HpdUrl\": \"<string>\", \"Threshold\": \"<string>\", \"Residuals\": \"<string>\", \"ResidualNotes\": \"<string>\", \"Notes\": \"<string>\", \"MaterialType\": \"<string>\", \"Substances\": \"<string>\" } # Name type: <string>required: true # Min type: <float>required: true # Max type: <float>required: true # Alternate type: <bool>required: true # Reportable type: <bool>required: true # HpdUrl type: <string>required: true # Threshold type: <string>required: true # Residuals type: <string>required: true # ResidualNotes type: <string>required: true # Notes type: <string>required: true # MaterialType type: <string>required: true # Substances type: <string>required: truerelated: Substances",
+    "url": "/2.2/content/materials#structure"
+  },
+  {
+    "id": 39,
+    "title": "Introduction",
+    "category": "Content",
+    "version": "2.2",
+    "header": "Overview",
+    "slug": "overview",
+    "content": "The Content section represents the heart of an HPD. This is where you'll find: MaterialsSubstancesHazards",
+    "url": "/2.2/content#overview"
+  },
+  {
+    "id": 40,
+    "title": "Introduction",
+    "category": "Content",
+    "version": "2.2",
+    "header": "Inventory Reporting Format",
+    "slug": "inventory-reporting-format",
+    "content": "HPDs can be created with two different inventory reporting formats: Nested Materials MethodBasic Method It's important to note that internally the same data structure is used for both. So in all cases, a Materials array will be returned as the top level element in Content. IMPORTANTJust to reiterate and be clear, both Nested and Basic inventories will return an array of Materials as the top level element in Content. Basic will always return a single Material, where Nested can return many.",
+    "url": "/2.2/content#inventory-reporting-format"
+  },
+  {
+    "id": 41,
+    "title": "Volatile Organic Compound",
+    "category": "Data",
+    "version": "2.2",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json{ \"VocContent\": \"<int>\", \"Material\": \"<int>\", \"Regulatory\": \"<int>\", \"Exempt\": \"<string>\", \"Ultra\": \"<string>\" } # VocContent type: <int>required: true # Material type: <int>required: true # Regulatory type: <int>required: true # Exempt type: <string>required: true # Ultra type: <string>required: true",
+    "url": "/2.2/data/voc#structure"
+  },
+  {
+    "id": 42,
+    "title": "Data Container",
+    "category": "Data",
+    "version": "2.2",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "The base data object should return the following JSON structure. json{ \"NumericId\": \"<int>\", \"DigitalId\": \"<string>\", \"RecordId\": \"<int>\", \"Build\": \"<string>\", \"FileName\": \"<string>\", \"Accessories\": \"<array>\", \"Certifications\": \"<array>\", \"Company\": \"<object>\", \"Content\": \"<object>\", \"General\": \"<object>\", \"Notes\": \"<object>\", \"Parts\": \"<array>\", \"Product\": \"<object>\", \"Reference\": \"<object>\", \"Voc\": \"<object>\", \"PublishedAt\": \"<timestamp>\", \"WithdrawnAt\": \"<timestamp>\", \"ScreenedAt\": \"<timestamp>\" } # NumericId type: <int>required: true # DigitalId type: <string>required: true # RecordId type: <int>required: true # Build type: <string>required: true # Filename type: <string>required: true # Accessories type: <array>required: falserelated: Accessoriesdefault: null|string # Certifications type: <array>required: truerelated: Certifications # Company type: <object>required: truerelated: Company # Content type: <object>required: truerelated: Content INFOThe content prop is simply a JSON object that wraps an HPD's content inventory. Content inventory details and structure, are documented in the Content Inventory section below. # General type: <object>required: truerelated: General TIPThe data object represents the Summary section of the HPD. # Notes type: <object>required: truerelated: Notes # Parts type: <array>required: falserelated: Partsdefault: null # Product type: <object>required: truerelated: Product # Reference type: <object>required: truerelated: Reference # Voc type: <object>required: truerelated: VOC # PublishedAt type: <timestamp>required: true # WithdrawnAt type: <timestamp>required: falsedefault: null # ScreenedAt type: <timestamp>required: true",
+    "url": "/2.2/data#structure"
+  },
+  {
+    "id": 43,
+    "title": "Product",
+    "category": "Data",
+    "version": "2.2",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json{ \"Name\": \"<string>\" } # Name type: <string>required: true",
+    "url": "/2.2/data/product#structure"
+  },
+  {
+    "id": 44,
+    "title": "Parts",
+    "category": "Data",
+    "version": "2.2",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json{ \"SupplierName\": \"<string>\", \"Name\": \"<string>\", \"Notes\": \"<string>\", \"Min\": \"<float>\", \"Max\": \"<float>\" } # SupplierName type: <string>required: true # Name type: <string>required: true # Notes type: <string>required: true # Min type: <float>required: true # Max type: <float>required: true",
+    "url": "/2.2/data/parts#structure"
+  },
+  {
+    "id": 45,
+    "title": "General Notes",
+    "category": "Data",
+    "version": "2.2",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json{ \"General\": \"<string>\" } # General type: <string>required: falsedefault: null|string",
+    "url": "/2.2/data/notes#structure"
+  },
+  {
+    "id": 46,
+    "title": "Reference",
+    "category": "Data",
+    "version": "2.2",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json{ \"Address1\": \"<string>\", \"Address2\": \"<string>\", \"City\": \"<string>\", \"State\": \"<string>\", \"Postal\": \"<string>\", \"Country\": \"<string>\", \"Website\": \"<string>\", \"Contact\": \"<string>\", \"Title\": \"<string>\", \"Phone\": \"<string>\", \"Email\": \"<string>\", \"PreparedBy\": \"<string>\", \"VerifiedBy\": \"<string>\" } # Address1 type: <string>required: true # Address2 type: <string>required: falsedefault: null|string # City type: <string>required: true # State type: <string>required: true # Postal type: <string>required: true # Country type: <string>required: true # Website type: <string>required: true # Contact type: <string>required: true # Title type: <string>required: true # Phone type: <string>required: true # Email type: <string>required: true # PreparedBy type: <int>required: falsedefault: null|string # VerifiedBy type: <int>required: falsedefault: null|string",
+    "url": "/2.2/data/reference#structure"
+  },
+  {
+    "id": 47,
+    "title": "Company",
+    "category": "Data",
+    "version": "2.2",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json{ \"Name\": \"<string>\" } # Name type: <string>required: true",
+    "url": "/2.2/data/company#structure"
+  },
+  {
+    "id": 48,
+    "title": "Certifications and Compliance",
+    "category": "Data",
+    "version": "2.2",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json[ { \"Type\": \"<string>\", \"OtherType\": \"<string>\", \"Name\": \"<string>\", \"Voc\": \"<string>\", \"Party\": \"<string>\", \"Issue\": \"<date>\", \"Expire\": \"<date>\", \"Lab\": \"<string>\", \"Facilities\": \"<string>\", \"Website\": \"<string>\", \"Notes\": \"<string>\" } ] # Type type: <string>required: true # OtherType type: <string>required: falsedefault: null # Name type: <string>required: true # Voc type: <string>required: falsedefault: null # Party type: <string>required: true # Issue type: <date>required: falsedefault: null # Expire type: <date>required: falsedefault: null # Lab type: <string>required: falsedefault: null # Facilities type: <string>required: falsedefault: null # Website type: <string>required: falsedefault: null # Notes type: <string>required: falsedefault: null",
+    "url": "/2.2/data/certifications#structure"
+  },
+  {
+    "id": 49,
+    "title": "Summary",
+    "category": "Data",
+    "version": "2.2",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json{ \"Classification\": \"<string>\", \"CsiDivision\": \"<string>\", \"CsiSection\": \"<string>\", \"Description\": \"<string>\", \"ThresholdType\": \"<string>\", \"InventoryNotes\": \"<string>\" } # Classification type: <string>required: falsedefault: null # CsiDivision type: <string>required: falsedefault: null # CsiSection type: <string>required: falsedefault: null # Description type: <string>required: falsedefault: null # ThresholdType type: <string>required: falsedefault: null # InventoryNotes type: <string>required: falsedefault: null",
+    "url": "/2.2/data/general#structure"
+  },
+  {
+    "id": 50,
+    "title": "Accessories",
+    "category": "Data",
+    "version": "2.2",
+    "header": "Structure",
+    "slug": "structure",
+    "content": "json[ { \"Name\": \"<string>\", \"Website\": \"<string>\", \"Conditions\": \"<string>\" } ] # Name type: <string>required: true # Website type: <string>required: true # Conditions type: <string>required: true",
+    "url": "/2.2/data/accessories#structure"
+  }
+]

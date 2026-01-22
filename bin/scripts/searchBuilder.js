@@ -1,125 +1,166 @@
 // @ts-nocheck
-// Import necessary modules
 import fs from 'fs';
 import path from 'path';
-import { promisify } from 'util';
 import matter from 'gray-matter';
+import { parseHTML } from 'linkedom';
 import { indexSearchData } from './meiliBuilder.js';
 import { logWithColor } from './logger.js';
 
-// Promisify fs methods
-const readdir = promisify(fs.readdir);
-const readFile = promisify(fs.readFile);
-const writeFile = promisify(fs.writeFile);
-
-// File and directory paths
 const srcPath = path.join(process.cwd(), 'src');
+const distPath = path.join(process.cwd(), 'dist');
 const outputFilePath = path.join(process.cwd(), '.vitepress/theme/data/search.json');
-const configFilePath = path.join(process.cwd(), '.vitepress/config.js');
 
-// Helper functions
-const isMarkdownFile = (file) => file.endsWith('.md');
 const createSlug = (text) => {
   return text
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, '') // Remove punctuation and special characters
-    .replace(/[\s_-]+/g, '-') // Replace spaces, underscores, and hyphens with a single hyphen
-    .replace(/^-+|-+$/g, ''); // Remove leading and trailing hyphens
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 };
 
-// Function to process and clean the content
-const processContent = (content) => {
-  let cleanedContent = content
-    .replace(/\[\[toc\]\]\n+/g, '') // Remove [[toc]] and following newlines
-    .replace(/\{\{[^}]*\}\}/g, '') // Remove {{ }} content
-    .replace(/\{[^}]*\}/g, '') // Remove { } content
-    .replace(/^#+\s*/gm, '') // Remove Markdown heading symbols
-    .replace(/:::.*?:::/gs, '') // Remove triple colon containers and their content
-    .replace(/^>\s*\[!.+$(.*?^>.*$)*/gm, '') // Remove GitHub-style containers
-    .replace(/````?.*?````?/gs, '') // Remove code blocks enclosed in 3 or 4 backticks
-    .replace(/<[^>]+\/>/gs, '') // Remove self-closing Vue component tags
-    .replace(/<[^>]+>.*?<\/[^>]+>/gs, '') // Remove Vue component opening and closing tags and their content
-    .trim(); // Remove leading and trailing whitespace including newlines
+// Scan markdown files to build metadata map (title, category, version)
+const getMarkdownMetadata = async () => {
+  const metadata = new Map();
 
-  return cleanedContent;
-};
+  const scanDir = async (dir, version = '') => {
+    const files = fs.readdirSync(dir, { withFileTypes: true });
 
-// Function to extract sections from markdown content
-const extractSections = (content, filePath, cleanUrls) => {
-  const headerRegex = /^## (.+?)\s*(?:\{\..*?\})?$/gm;
-  let match;
-  const sections = [];
-  let lastPos = 0;
+    for (const file of files) {
+      const fullPath = path.join(dir, file.name);
 
-  while ((match = headerRegex.exec(content)) !== null) {
-    const startPos = content.indexOf('\n', match.index) + 1;
-    const endPos = content.indexOf('\n## ', startPos);
-    const header = match[1].trim();
-    const slug = createSlug(header);
-    const rawSectionContent = content.substring(startPos, endPos > 0 ? endPos : undefined).trim();
-    const sectionContent = processContent(rawSectionContent);
-    const url = cleanUrls ? '/' + filePath.replace(/\.md$/, '') + '#' + slug : '/' + filePath + '.html#' + slug;
+      if (file.isDirectory() && !file.name.startsWith('.') && file.name !== 'public') {
+        const newVersion = version || file.name;
+        await scanDir(fullPath, newVersion);
+      } else if (file.name.endsWith('.md')) {
+        const content = fs.readFileSync(fullPath, 'utf8');
+        const parsed = matter(content);
 
-    sections.push({
-      header,
-      slug,
-      content: sectionContent,
-      url: url,
-    });
-  }
+        // Build URL path from file path
+        const relativePath = path.relative(srcPath, fullPath);
+        let urlPath = '/' + relativePath.replace(/\.md$/, '').replace(/\/index$/, '');
+        if (urlPath === '/index') urlPath = '/';
 
-  return sections;
-};
-
-// Process directory recursively
-const processDirectory = async (dir, results = [], cleanUrls) => {
-  const directoryPath = path.join(srcPath, dir);
-  const files = await readdir(directoryPath, { withFileTypes: true });
-
-  for (const file of files) {
-    if (file.isDirectory()) {
-      await processDirectory(path.join(dir, file.name), results, cleanUrls);
-    } else if (isMarkdownFile(file.name)) {
-      const filePath = path.join(directoryPath, file.name);
-      const content = await readFile(filePath, 'utf8');
-      const parsed = matter(content);
-      const sections = extractSections(parsed.content, path.join(dir, file.name), cleanUrls);
-
-      sections.forEach((section, index) => {
-        results.push({
-          id: results.length + 1,
+        metadata.set(urlPath, {
           title: parsed.data.title || 'Untitled',
           category: parsed.data.category || 'Uncategorized',
-          version: dir.split(path.sep)[0],
-          ...section,
+          version: version || relativePath.split(path.sep)[0],
         });
-      });
+      }
     }
-  }
+  };
 
+  await scanDir(srcPath);
+  return metadata;
+};
+
+// Crawl built HTML files and extract content
+const crawlHtmlFiles = async (metadata) => {
+  const results = [];
+  let id = 1;
+
+  const scanDir = async (dir) => {
+    if (!fs.existsSync(dir)) {
+      throw new Error(`dist directory not found. Run vitepress build first.`);
+    }
+
+    const files = fs.readdirSync(dir, { withFileTypes: true });
+
+    for (const file of files) {
+      const fullPath = path.join(dir, file.name);
+
+      if (file.isDirectory()) {
+        await scanDir(fullPath);
+      } else if (file.name.endsWith('.html')) {
+        const html = fs.readFileSync(fullPath, 'utf8');
+        const { document } = parseHTML(html);
+
+        // Build URL path from file path
+        const relativePath = path.relative(distPath, fullPath);
+        let urlPath = '/' + relativePath.replace(/\.html$/, '').replace(/\/index$/, '');
+        if (urlPath === '/index') urlPath = '/';
+
+        // Get metadata for this page
+        const meta = metadata.get(urlPath) ||
+          metadata.get(urlPath + '/') || {
+            title: document.querySelector('title')?.textContent || 'Untitled',
+            category: 'Uncategorized',
+            version: urlPath.split('/').filter(Boolean)[0] || '',
+          };
+
+        // Find content container
+        const contentEl = document.querySelector('.prose') || document.querySelector('main') || document.body;
+        if (!contentEl) continue;
+
+        // Extract sections based on h2 headers
+        const headers = contentEl.querySelectorAll('h2');
+
+        headers.forEach((h2) => {
+          // Clean header text - remove markdown # symbols and anchor links
+          const headerText = (h2.textContent?.trim() || '').replace(/^#+\s*/, '').replace(/\s*#$/, '');
+          const slug = h2.id || createSlug(headerText);
+
+          // Collect content until next h2
+          let content = '';
+          let sibling = h2.nextElementSibling;
+
+          while (sibling && sibling.tagName !== 'H2') {
+            // Skip script and style tags
+            if (sibling.tagName !== 'SCRIPT' && sibling.tagName !== 'STYLE') {
+              content += (sibling.textContent || '') + ' ';
+            }
+            sibling = sibling.nextElementSibling;
+          }
+
+          content = content.replace(/\s+/g, ' ').trim();
+
+          if (headerText && content) {
+            results.push({
+              id: id++,
+              title: meta.title,
+              category: meta.category,
+              version: meta.version,
+              header: headerText,
+              slug,
+              content,
+              url: urlPath + '#' + slug,
+            });
+          }
+        });
+      }
+    }
+  };
+
+  await scanDir(distPath);
   return results;
 };
 
-// Main function to generate the index
+// Main function to generate the index by crawling built HTML
 const generateIndex = async () => {
   try {
-    const vitepressConfig = await import(configFilePath);
-    const cleanUrls = vitepressConfig.default.cleanUrls || false;
-    const searchProvider = vitepressConfig.default.themeConfig.search.provider;
+    logWithColor('Reading markdown frontmatter for metadata...', 'blue');
+    const metadata = await getMarkdownMetadata();
 
-    const results = await processDirectory('.', [], cleanUrls);
-    await writeFile(outputFilePath, JSON.stringify(results, null, 2));
-    logWithColor(`Indexed ${results.length} sections.`, 'blue');
+    logWithColor('Crawling built HTML files for content...', 'blue');
+    const results = await crawlHtmlFiles(metadata);
+
+    const jsonOutput = JSON.stringify(results, null, 2);
+
+    // Write to theme data folder
+    fs.writeFileSync(outputFilePath, jsonOutput);
+
+    // Also copy to dist for runtime access
+    const distSearchPath = path.join(distPath, 'search.json');
+    fs.writeFileSync(distSearchPath, jsonOutput);
+
+    logWithColor(`Indexed ${results.length} sections from HTML.`, 'blue');
     logWithColor('Search index generated successfully.', 'green');
 
-    if (searchProvider === 'meilisearch') {
-      indexSearchData();
-    }
+    // Push to Meilisearch if configured
+    await indexSearchData();
   } catch (error) {
     logWithColor(`Error generating search index: ${error.message}`, 'red');
   }
 };
 
-// Export the main function
 export { generateIndex };

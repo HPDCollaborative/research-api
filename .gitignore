@@ -7,4 +7,4 @@
 .env
 .env.prod
 .deploy-script
-package-lock.json
+bun.lock

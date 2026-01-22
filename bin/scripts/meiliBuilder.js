@@ -1,6 +1,5 @@
 // @ts-nocheck
 import fs from 'fs';
-import https from 'https';
 import siteConfig from '../../.vitepress/config.js';
 import { MeiliSearch } from 'meilisearch';
 import { logWithColor } from './logger.js';
@@ -10,14 +9,9 @@ async function indexSearchData() {
     return;
   }
 
-  const httpsAgent = new https.Agent({
-    rejectUnauthorized: false,
-  });
-
   const client = new MeiliSearch({
     host: process.env.SEARCH_HOST,
     apiKey: process.env.ADMIN_KEY,
-    httpsAgent,
   });
 
   try {
@@ -30,14 +24,18 @@ async function indexSearchData() {
       const response = await index.deleteAllDocuments();
       logWithColor(`Task #${response.taskUid} has been ${response.status}.`, 'green');
     } catch (delError) {
-      logWithColor(`An unexpected response was received from Meilisearch: ${delError.message}`, 'red');
+      logWithColor(`Delete error: ${delError.message}`, 'red');
+      if (delError.cause) logWithColor(`Cause: ${JSON.stringify(delError.cause)}`, 'red');
+      if (delError.code) logWithColor(`Code: ${delError.code}`, 'red');
     }
 
     try {
       const response = await index.addDocuments(data);
       logWithColor(`Task #${response.taskUid} has been ${response.status}.`, 'green');
     } catch (subError) {
-      logWithColor(`An unexpected response was received from Meilisearch: ${subError.message}`, 'red');
+      logWithColor(`Add error: ${subError.message}`, 'red');
+      if (subError.cause) logWithColor(`Cause: ${JSON.stringify(subError.cause)}`, 'red');
+      if (subError.code) logWithColor(`Code: ${subError.code}`, 'red');
     }
   } catch (error) {
     logWithColor(error.message, 'red');
