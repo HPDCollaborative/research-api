@@ -182,11 +182,15 @@ git push origin 3.0
 
 ### Step 2: Notify the Builder Team
 
-The `.env` file is **never committed to git**. Once your documentation branch is ready:
+The list of versions to build is stored in the `DOC_VERSIONS` variable in the `.env` file **on the live server**. This file is never committed to git and can only be modified by someone with server access.
+
+Until the Builder team adds your new version to `DOC_VERSIONS`, the deployment automation will not pull or build your new branch—even though it exists in the repository.
+
+Once your documentation branch is ready:
 
 1. Contact the HPD Builder team
 2. Let them know the new version branch is ready (e.g., "Version 3.0 branch is ready in research-api-documents")
-3. The Builder team will update the server's `.env` file to include the new version in `DOC_VERSIONS`
+3. The Builder team will SSH into the server and update the `.env` file to include the new version in `DOC_VERSIONS`
 4. The Builder team will trigger a deployment to publish the new version
 
 ---
